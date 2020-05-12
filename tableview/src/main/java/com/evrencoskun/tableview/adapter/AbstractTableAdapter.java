@@ -86,6 +86,7 @@ public abstract class AbstractTableAdapter<CH, RH, C> implements ITableAdapter<C
         // Set the items to the adapter
         mColumnHeaderRecyclerViewAdapter.setItems(mColumnHeaderItems);
         dispatchColumnHeaderDataSetChangesToListeners(columnHeaderItems);
+        initCornerView();
     }
 
     public void setRowHeaderItems(@Nullable List<RH> rowHeaderItems) {
@@ -98,6 +99,7 @@ public abstract class AbstractTableAdapter<CH, RH, C> implements ITableAdapter<C
         // Set the items to the adapter
         mRowHeaderRecyclerViewAdapter.setItems(mRowHeaderItems);
         dispatchRowHeaderDataSetChangesToListeners(mRowHeaderItems);
+        initCornerView();
     }
 
     public void setCellItems(@Nullable List<List<C>> cellItems) {
@@ -112,6 +114,7 @@ public abstract class AbstractTableAdapter<CH, RH, C> implements ITableAdapter<C
         // Set the items to the adapter
         mCellRecyclerViewAdapter.setItems(mCellItems);
         dispatchCellDataSetChangesToListeners(mCellItems);
+        initCornerView();
     }
 
     public void setAllItems(@Nullable List<CH> columnHeaderItems, @Nullable List<RH> rowHeaderItems, @Nullable List<List<C>>
@@ -120,10 +123,14 @@ public abstract class AbstractTableAdapter<CH, RH, C> implements ITableAdapter<C
         setColumnHeaderItems(columnHeaderItems);
         setRowHeaderItems(rowHeaderItems);
         setCellItems(cellItems);
+        initCornerView();
 
+    }
+
+    private void initCornerView() {
         // Control corner view
-        if ((columnHeaderItems != null && !columnHeaderItems.isEmpty()) && (rowHeaderItems !=
-                null && !rowHeaderItems.isEmpty()) && (cellItems != null && !cellItems.isEmpty())
+        if ((mColumnHeaderItems != null && !mColumnHeaderItems.isEmpty()) && (mRowHeaderItems !=
+                null && !mRowHeaderItems.isEmpty()) && (mCellItems != null && !mCellItems.isEmpty())
                 && mTableView != null && mCornerView == null) {
 
             // Create corner view
@@ -133,7 +140,7 @@ public abstract class AbstractTableAdapter<CH, RH, C> implements ITableAdapter<C
         } else if (mCornerView != null) {
 
             // Change corner view visibility
-            if (rowHeaderItems != null && !rowHeaderItems.isEmpty()) {
+            if (mRowHeaderItems != null && !mRowHeaderItems.isEmpty()) {
                 mCornerView.setVisibility(View.VISIBLE);
             } else {
                 mCornerView.setVisibility(View.GONE);
@@ -141,6 +148,8 @@ public abstract class AbstractTableAdapter<CH, RH, C> implements ITableAdapter<C
         }
     }
 
+
+    @Override
     @Nullable
     public View getCornerView() {
         return mCornerView;

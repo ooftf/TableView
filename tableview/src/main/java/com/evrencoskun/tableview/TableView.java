@@ -190,18 +190,20 @@ public class TableView extends ConstraintLayout implements ITableView {
         }
     }
 
+    View shadow;
+
     private void initialize() {
 
         // Create Views
         mColumnHeaderRecyclerView = createColumnHeaderRecyclerView();
         mRowHeaderRecyclerView = createRowHeaderRecyclerView();
         mCellRecyclerView = createCellRecyclerView();
-
+        shadow = createShadowView();
         // Add Views
         addView(mColumnHeaderRecyclerView);
         addView(mRowHeaderRecyclerView);
         addView(mCellRecyclerView);
-        addView(createShadowView());
+        addView(shadow);
         // Create Handlers
         mSelectionHandler = new SelectionHandler(this);
         mVisibilityHandler = new VisibilityHandler(this);
@@ -273,7 +275,7 @@ public class TableView extends ConstraintLayout implements ITableView {
     @NonNull
     protected CellRecyclerView createColumnHeaderRecyclerView() {
         CellRecyclerView recyclerView = new CellRecyclerView(getContext());
-
+        recyclerView.setOverScrollMode(OVER_SCROLL_NEVER);
         // Set layout manager
         recyclerView.setLayoutManager(getColumnHeaderLayoutManager());
 
@@ -296,7 +298,7 @@ public class TableView extends ConstraintLayout implements ITableView {
     @NonNull
     protected CellRecyclerView createRowHeaderRecyclerView() {
         CellRecyclerView recyclerView = new CellRecyclerView(getContext());
-
+        recyclerView.setOverScrollMode(OVER_SCROLL_NEVER);
         // Set layout manager
         recyclerView.setLayoutManager(getRowHeaderLayoutManager());
 
@@ -318,7 +320,7 @@ public class TableView extends ConstraintLayout implements ITableView {
     @NonNull
     protected CellRecyclerView createCellRecyclerView() {
         CellRecyclerView recyclerView = new CellRecyclerView(getContext());
-
+        recyclerView.setOverScrollMode(OVER_SCROLL_NEVER);
         // Disable multitouch
         recyclerView.setMotionEventSplittingEnabled(false);
 
@@ -783,6 +785,10 @@ public class TableView extends ConstraintLayout implements ITableView {
         mCellRecyclerView.setLayoutParams(layoutParamsCell);
         mCellRecyclerView.requestLayout();
 
+        LayoutParams shadowLayoutParams = (LayoutParams) shadow.getLayoutParams();
+        shadowLayoutParams.leftMargin = rowHeaderWidth;
+        shadow.setLayoutParams(layoutParamsCell);
+        shadow.requestLayout();
         if (getAdapter() != null) {
             // update CornerView size
             getAdapter().setRowHeaderWidth(rowHeaderWidth);
