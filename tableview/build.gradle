@@ -49,6 +49,7 @@ dependencies {
 }
 
 publish {
+    repoName = 'maven'
     userOrg = 'ooftf' //user name of bintray.com
     groupId = 'com.ooftf' //jcenter's url
     artifactId = 'tableview' //project name
@@ -57,4 +58,5 @@ publish {
     website = 'https://github.com/ooftf/TableView' //website
     bintrayUser = 'ooftf'
     bintrayKey = LocalBintrayKey()
+    dryRun = false
 }
