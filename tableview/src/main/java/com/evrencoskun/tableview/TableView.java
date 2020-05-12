@@ -23,8 +23,17 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.evrencoskun.tableview.adapter.AbstractTableAdapter;
 import com.evrencoskun.tableview.adapter.recyclerview.CellRecyclerView;
@@ -48,19 +57,11 @@ import com.evrencoskun.tableview.listener.scroll.VerticalRecyclerViewListener;
 import com.evrencoskun.tableview.preference.SavedState;
 import com.evrencoskun.tableview.sort.SortState;
 
-import androidx.annotation.AttrRes;
-import androidx.annotation.ColorInt;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 /**
  * Created by evrencoskun on 11/06/2017.
  */
 
-public class TableView extends FrameLayout implements ITableView {
+public class TableView extends ConstraintLayout implements ITableView {
     @NonNull
     protected CellRecyclerView mCellRecyclerView;
     @NonNull
@@ -200,7 +201,7 @@ public class TableView extends FrameLayout implements ITableView {
         addView(mColumnHeaderRecyclerView);
         addView(mRowHeaderRecyclerView);
         addView(mCellRecyclerView);
-
+        addView(createShadowView());
         // Create Handlers
         mSelectionHandler = new SelectionHandler(this);
         mVisibilityHandler = new VisibilityHandler(this);
@@ -209,6 +210,20 @@ public class TableView extends FrameLayout implements ITableView {
         mColumnWidthHandler = new ColumnWidthHandler(this);
 
         initializeListeners();
+    }
+
+
+    private View createShadowView() {
+        View view = new View(getContext());
+        view.setBackgroundResource(R.drawable.table_shadow);
+        // Set layout params
+        ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams((int) getContext().getResources().getDimension(R.dimen.default_shadow_width), LayoutParams.MATCH_CONSTRAINT);
+        layoutParams.leftToLeft = getId();
+        layoutParams.leftMargin = mRowHeaderWidth;
+        layoutParams.topToTop = getId();
+        layoutParams.bottomToBottom = getId();
+        view.setLayoutParams(layoutParams);
+        return view;
     }
 
     protected void initializeListeners() {
@@ -263,9 +278,11 @@ public class TableView extends FrameLayout implements ITableView {
         recyclerView.setLayoutManager(getColumnHeaderLayoutManager());
 
         // Set layout params
-        LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT,
+        ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(LayoutParams.MATCH_CONSTRAINT,
                 mColumnHeaderHeight);
+        layoutParams.leftToLeft = getId();
         layoutParams.leftMargin = mRowHeaderWidth;
+        layoutParams.rightToRight = getId();
         recyclerView.setLayoutParams(layoutParams);
 
         if (isShowHorizontalSeparators()) {
@@ -286,6 +303,7 @@ public class TableView extends FrameLayout implements ITableView {
         // Set layout params
         LayoutParams layoutParams = new LayoutParams(mRowHeaderWidth, LayoutParams.WRAP_CONTENT);
         layoutParams.topMargin = mColumnHeaderHeight;
+        layoutParams.topToTop = getId();
         recyclerView.setLayoutParams(layoutParams);
 
 
@@ -308,10 +326,12 @@ public class TableView extends FrameLayout implements ITableView {
         recyclerView.setLayoutManager(getCellLayoutManager());
 
         // Set layout params
-        LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams
-                .WRAP_CONTENT);
+        ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(LayoutParams.MATCH_CONSTRAINT, LayoutParams.WRAP_CONTENT);
+        layoutParams.topToTop = getId();
+        layoutParams.leftToLeft = getId();
         layoutParams.leftMargin = mRowHeaderWidth;
         layoutParams.topMargin = mColumnHeaderHeight;
+        layoutParams.rightToRight = getId();
         recyclerView.setLayoutParams(layoutParams);
 
         if (isShowVerticalSeparators()) {
@@ -369,7 +389,7 @@ public class TableView extends FrameLayout implements ITableView {
     }
 
     @Override
-    public boolean isAllowClickInsideCell(){
+    public boolean isAllowClickInsideCell() {
         return mAllowClickInsideCell;
     }
 
@@ -528,6 +548,7 @@ public class TableView extends FrameLayout implements ITableView {
         mScrollHandler.scrollToRowPosition(row, offset);
     }
 
+    @Override
     @NonNull
     public ScrollHandler getScrollHandler() {
         return mScrollHandler;
