@@ -67,7 +67,7 @@ public class CellRecyclerViewAdapter<C> extends AbstractRecyclerViewAdapter<C> {
 
         // Create a RecyclerView as a Row of the CellRecyclerView
         CellRecyclerView recyclerView = new CellRecyclerView(mContext);
-
+        recyclerView.setNestedScrollingEnabled(false);
         // Use the same view pool
         recyclerView.setRecycledViewPool(mRecycledViewPool);
 

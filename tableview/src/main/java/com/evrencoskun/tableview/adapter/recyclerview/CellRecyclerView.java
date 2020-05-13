@@ -46,7 +46,7 @@ public class CellRecyclerView extends RecyclerView {
 
         // These are necessary.
         this.setHasFixedSize(false);
-        this.setNestedScrollingEnabled(false);
+        //this.setNestedScrollingEnabled(false);
         // These are for better scrolling process.
         this.setItemViewCacheSize(context.getResources().getInteger(R.integer
                 .default_item_cache_size));
