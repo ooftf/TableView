@@ -137,6 +137,14 @@ public class TableView extends ConstraintLayout implements ITableView {
         initialize();
     }
 
+    @NonNull
+    protected int mCellRecyclerViewId = generateViewId();
+    @NonNull
+    protected int mColumnHeaderRecyclerViewId = generateViewId();
+    @NonNull
+    protected int mRowHeaderRecyclerViewId = generateViewId();
+
+
     private void initialDefaultValues(@Nullable AttributeSet attrs) {
         // Dimensions
         mRowHeaderWidth = (int) getResources().getDimension(R.dimen.default_row_header_width);
@@ -196,14 +204,14 @@ public class TableView extends ConstraintLayout implements ITableView {
 
         // Create Views
         mColumnHeaderRecyclerView = createColumnHeaderRecyclerView();
-        mRowHeaderRecyclerView = createRowHeaderRecyclerView();
-        mCellRecyclerView = createCellRecyclerView();
-        shadow = createShadowView();
-        // Add Views
         addView(mColumnHeaderRecyclerView);
+        mRowHeaderRecyclerView = createRowHeaderRecyclerView();
         addView(mRowHeaderRecyclerView);
+        mCellRecyclerView = createCellRecyclerView();
         addView(mCellRecyclerView);
+        shadow = createShadowView();
         addView(shadow);
+        // Add Views
         // Create Handlers
         mSelectionHandler = new SelectionHandler(this);
         mVisibilityHandler = new VisibilityHandler(this);
@@ -220,8 +228,7 @@ public class TableView extends ConstraintLayout implements ITableView {
         view.setBackgroundResource(R.drawable.table_shadow);
         // Set layout params
         ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams((int) getContext().getResources().getDimension(R.dimen.default_shadow_width), LayoutParams.MATCH_CONSTRAINT);
-        layoutParams.leftToLeft = getId();
-        layoutParams.leftMargin = mRowHeaderWidth;
+        layoutParams.leftToRight = mRowHeaderRecyclerViewId;
         layoutParams.topToTop = getId();
         layoutParams.bottomToBottom = getId();
         view.setLayoutParams(layoutParams);
@@ -275,6 +282,7 @@ public class TableView extends ConstraintLayout implements ITableView {
     @NonNull
     protected CellRecyclerView createColumnHeaderRecyclerView() {
         CellRecyclerView recyclerView = new CellRecyclerView(getContext());
+        recyclerView.setId(mColumnHeaderRecyclerViewId);
         recyclerView.setOverScrollMode(OVER_SCROLL_NEVER);
         // Set layout manager
         recyclerView.setLayoutManager(getColumnHeaderLayoutManager());
@@ -282,9 +290,8 @@ public class TableView extends ConstraintLayout implements ITableView {
         // Set layout params
         ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(LayoutParams.MATCH_CONSTRAINT,
                 mColumnHeaderHeight);
-        layoutParams.leftToLeft = getId();
-        layoutParams.leftMargin = mRowHeaderWidth;
-        layoutParams.rightToRight = getId();
+        layoutParams.leftToRight = mRowHeaderRecyclerViewId;
+        layoutParams.rightToRight = LayoutParams.PARENT_ID;
         recyclerView.setLayoutParams(layoutParams);
 
         if (isShowHorizontalSeparators()) {
@@ -298,17 +305,18 @@ public class TableView extends ConstraintLayout implements ITableView {
     @NonNull
     protected CellRecyclerView createRowHeaderRecyclerView() {
         CellRecyclerView recyclerView = new CellRecyclerView(getContext());
+        recyclerView.setId(mRowHeaderRecyclerViewId);
         recyclerView.setOverScrollMode(OVER_SCROLL_NEVER);
         // Set layout manager
         recyclerView.setLayoutManager(getRowHeaderLayoutManager());
 
         // Set layout params
-        LayoutParams layoutParams = new LayoutParams(mRowHeaderWidth, LayoutParams.WRAP_CONTENT);
-        layoutParams.topMargin = mColumnHeaderHeight;
-        layoutParams.topToTop = getId();
+        ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(mRowHeaderWidth, LayoutParams.WRAP_CONTENT);
+        layoutParams.bottomToBottom = LayoutParams.PARENT_ID;
+        layoutParams.topToBottom = mColumnHeaderRecyclerViewId;
+        layoutParams.startToStart = LayoutParams.PARENT_ID;
+        layoutParams.constrainedHeight = true;
         recyclerView.setLayoutParams(layoutParams);
-
-
         if (isShowVerticalSeparators()) {
             // Add vertical item decoration to display row line
             recyclerView.addItemDecoration(getVerticalItemDecoration());
@@ -320,20 +328,23 @@ public class TableView extends ConstraintLayout implements ITableView {
     @NonNull
     protected CellRecyclerView createCellRecyclerView() {
         CellRecyclerView recyclerView = new CellRecyclerView(getContext());
+        recyclerView.setId(mCellRecyclerViewId);
         recyclerView.setOverScrollMode(OVER_SCROLL_NEVER);
         // Disable multitouch
         recyclerView.setMotionEventSplittingEnabled(false);
 
         // Set layout manager
         recyclerView.setLayoutManager(getCellLayoutManager());
-
         // Set layout params
         ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(LayoutParams.MATCH_CONSTRAINT, LayoutParams.WRAP_CONTENT);
-        layoutParams.topToTop = getId();
-        layoutParams.leftToLeft = getId();
-        layoutParams.leftMargin = mRowHeaderWidth;
-        layoutParams.topMargin = mColumnHeaderHeight;
-        layoutParams.rightToRight = getId();
+        layoutParams.constrainedHeight = true;
+        layoutParams.topToBottom = mColumnHeaderRecyclerViewId;
+        layoutParams.leftToRight = mRowHeaderRecyclerViewId;
+        layoutParams.bottomToBottom = LayoutParams.PARENT_ID;
+        layoutParams.rightToRight = LayoutParams.PARENT_ID;
+     /*   layoutParams.leftMargin = mRowHeaderWidth;
+        layoutParams.topMargin = mColumnHeaderHeight;*/
+
         recyclerView.setLayoutParams(layoutParams);
 
         if (isShowVerticalSeparators()) {
@@ -773,7 +784,7 @@ public class TableView extends ConstraintLayout implements ITableView {
         mRowHeaderRecyclerView.setLayoutParams(layoutParamsRow);
         mRowHeaderRecyclerView.requestLayout();
 
-        // Update ColumnHeader left margin
+     /*   // Update ColumnHeader left margin
         LayoutParams layoutParamsColumn = (LayoutParams) mColumnHeaderRecyclerView.getLayoutParams();
         layoutParamsColumn.leftMargin = rowHeaderWidth;
         mColumnHeaderRecyclerView.setLayoutParams(layoutParamsColumn);
@@ -788,7 +799,7 @@ public class TableView extends ConstraintLayout implements ITableView {
         LayoutParams shadowLayoutParams = (LayoutParams) shadow.getLayoutParams();
         shadowLayoutParams.leftMargin = rowHeaderWidth;
         shadow.setLayoutParams(layoutParamsCell);
-        shadow.requestLayout();
+        shadow.requestLayout();*/
         if (getAdapter() != null) {
             // update CornerView size
             getAdapter().setRowHeaderWidth(rowHeaderWidth);
