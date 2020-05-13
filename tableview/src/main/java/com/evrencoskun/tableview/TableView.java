@@ -322,7 +322,7 @@ public class TableView extends ConstraintLayout implements ITableView {
         CellRecyclerView recyclerView = new CellRecyclerView(getContext());
         recyclerView.setOverScrollMode(OVER_SCROLL_NEVER);
         // Disable multitouch
-        //recyclerView.setMotionEventSplittingEnabled(false);
+        recyclerView.setMotionEventSplittingEnabled(false);
 
         // Set layout manager
         recyclerView.setLayoutManager(getCellLayoutManager());

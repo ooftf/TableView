@@ -77,7 +77,7 @@ public class CellLayoutManager extends LinearLayoutManager {
         // Add new one
     }
 
-   /* @Override
+    @Override
     public void onAttachedToWindow(RecyclerView view) {
         super.onAttachedToWindow(view);
 
@@ -85,9 +85,9 @@ public class CellLayoutManager extends LinearLayoutManager {
         if (mHorizontalListener == null) {
             mHorizontalListener = mTableView.getHorizontalRecyclerViewListener();
         }
-    }*/
+    }
 
-   /* @Override
+    @Override
     public int scrollVerticallyBy(int dy, RecyclerView.Recycler recycler, RecyclerView.State
             state) {
         if (mRowHeaderRecyclerView.getScrollState() == RecyclerView.SCROLL_STATE_IDLE &&
@@ -102,16 +102,16 @@ public class CellLayoutManager extends LinearLayoutManager {
         // It is important to determine right position to fit all columns which are the same y pos.
         mLastDy = dy;
         return scroll;
-    }*/
+    }
 
- /*   @Override
+    @Override
     public void onScrollStateChanged(int state) {
         super.onScrollStateChanged(state);
         if (state == RecyclerView.SCROLL_STATE_IDLE) {
             // It is important to set it 0 to be able to know which direction is being scrolled
             mLastDy = 0;
         }
-    }*/
+    }
 
     /**
      * This method helps to fit all columns which are displayed on screen.
@@ -381,7 +381,7 @@ public class CellLayoutManager extends LinearLayoutManager {
         return false;
     }
 
-   /* @Override
+    @Override
     public void measureChildWithMargins(@NonNull View child, int widthUsed, int heightUsed) {
         super.measureChildWithMargins(child, widthUsed, heightUsed);
 
@@ -439,7 +439,7 @@ public class CellLayoutManager extends LinearLayoutManager {
                 }
             }
         }
-    }*/
+    }
 
     @NonNull
     public AbstractViewHolder[] getVisibleCellViewsByColumnPosition(int xPosition) {
