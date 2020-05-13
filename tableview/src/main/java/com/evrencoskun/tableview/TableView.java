@@ -784,22 +784,6 @@ public class TableView extends ConstraintLayout implements ITableView {
         mRowHeaderRecyclerView.setLayoutParams(layoutParamsRow);
         mRowHeaderRecyclerView.requestLayout();
 
-     /*   // Update ColumnHeader left margin
-        LayoutParams layoutParamsColumn = (LayoutParams) mColumnHeaderRecyclerView.getLayoutParams();
-        layoutParamsColumn.leftMargin = rowHeaderWidth;
-        mColumnHeaderRecyclerView.setLayoutParams(layoutParamsColumn);
-        mColumnHeaderRecyclerView.requestLayout();
-
-        // Update Cells left margin
-        LayoutParams layoutParamsCell = (LayoutParams) mCellRecyclerView.getLayoutParams();
-        layoutParamsCell.leftMargin = rowHeaderWidth;
-        mCellRecyclerView.setLayoutParams(layoutParamsCell);
-        mCellRecyclerView.requestLayout();
-
-        LayoutParams shadowLayoutParams = (LayoutParams) shadow.getLayoutParams();
-        shadowLayoutParams.leftMargin = rowHeaderWidth;
-        shadow.setLayoutParams(layoutParamsCell);
-        shadow.requestLayout();*/
         if (getAdapter() != null) {
             // update CornerView size
             getAdapter().setRowHeaderWidth(rowHeaderWidth);
