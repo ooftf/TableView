@@ -229,8 +229,8 @@ public class TableView extends ConstraintLayout implements ITableView {
         // Set layout params
         ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams((int) getContext().getResources().getDimension(R.dimen.default_shadow_width), LayoutParams.MATCH_CONSTRAINT);
         layoutParams.leftToRight = mRowHeaderRecyclerViewId;
-        layoutParams.topToTop = getId();
-        layoutParams.bottomToBottom = getId();
+        layoutParams.topToTop = LayoutParams.PARENT_ID;
+        layoutParams.bottomToBottom = mRowHeaderRecyclerViewId;
         view.setLayoutParams(layoutParams);
         return view;
     }
