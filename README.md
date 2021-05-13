@@ -50,7 +50,7 @@ To use this library in your android project, just simply add the following depen
 
 ```
 dependencies {
-    implementation 'com.ooftf:tableview:0.8.9.3-pro' 
+    implementation 'com.github.ooftf:tableview:0.8.9.3' 
 }
 ```
 
